@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 
+
 namespace LeetCode
 {
     public class PalindromeClass
