@@ -14,7 +14,7 @@
         {
             var x = new Reverser();
 
-            var text = 0123;
+            var text = -2147483648;
 
             Console.WriteLine(x.Reverse(text));
         }

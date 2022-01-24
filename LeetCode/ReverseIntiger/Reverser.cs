@@ -8,29 +8,34 @@
 
     public class Reverser
     {
-        public int Reverse(int num)
+        public long Reverse(int num)
         {
-            //var NumX = num.ToString();
-
-            //var number = "";
-            //for (int i = NumX.Length - 1; i >= 0; i--)
-            //{
-            //    number += NumX[i];
-            //}
-            //var x = num.ToString().Reverse().Aggregate(0, (b, x) => 10 * b + x - '0');
-            //if (num < 0)
-            //{
-            //    x = x * -1;
-            //}
-            //return x;
             int left = num;
+            long revL = 0;
             int rev = 0;
-            while (Convert.ToBoolean(left)) // instead of left>0 , to reverse signed numbers as well
+            var maxInt = int.MaxValue;
+
+            while (Convert.ToBoolean(left))
             {
                 int r = left % 10;
+                revL = revL * 10 + r;
                 rev = rev * 10 + r;
-                left = left / 10;  //left = Math.floor(left / 10); 
+                left = left / 10;
             }
+
+            // Whit this we make sure the reverset number is not bigger or greather then (int.MaxValue || int.MaxValue * -1)
+
+            if (revL > maxInt)
+            {
+                rev = 0;
+     
+                return 0;
+            }
+            if(revL < maxInt * -1)
+            {
+                return 0;
+            }
+         
             return rev;
 
         }
