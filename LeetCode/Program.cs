@@ -7,15 +7,16 @@
     using LeetCode.LongestPalindrome;
     using LeetCode.TargetNumInArr;
     using LeetCode.ContainerWithMostWater;
+    using LeetCode.ReverseIntiger;
     class Program
     {
         static void Main(string[] args)
         {
-            var x = new PalindromeTextReader();
+            var x = new Reverser();
 
-            var text = "aaaracecarbbb";
+            var text = 0123;
 
-            Console.WriteLine(x.Checker(text));
+            Console.WriteLine(x.Reverse(text));
         }
     }
 }
