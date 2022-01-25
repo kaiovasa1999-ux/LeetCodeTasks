@@ -24,7 +24,7 @@
             }
 
             // Whit this we make sure the reverset number is not bigger or greather then (int.MaxValue || int.MaxValue * -1)
-
+            // Becouse the function have to return Int value type and couldn't be possible if is not in range of int.
             if (revL > maxInt)
             {
                 rev = 0;
