@@ -3,42 +3,46 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    
+
     class Program
     {
         static void Main(string[] args)
         {
-            int[] data = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
-            var n = data[0];
-            var s = data[1];
-            var x = data[2];
-            var numberdata = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
-            Queue<int> q = new Queue<int>(numberdata);
-
-
-            while (true)
+            int x = int.Parse(Console.ReadLine());
+            Stack<int> stack = new Stack<int>();
+            var res = string.Empty;
+            for (
+                int i = 0; i < x; i++)
             {
-                if (q.Count() <= s)
+                int[] data = Console.ReadLine().Split(" ").Select(int.Parse).ToArray();
+                var function = data[0];
+                if(function == 1)
                 {
-                    Console.WriteLine(0);
-                    break;
+                    var number = data[1];
+                    stack.Push(number);
                 }
-                for (int i = 0; i < s; i++)
+                if(!stack.Any() && function == 2)
                 {
-                    q.Dequeue();
+                    continue;
                 }
-                if (q.Contains(x))
+                if(function == 2)
                 {
-                    Console.WriteLine(true);
+                    stack.Pop();
                 }
-
+                if(function == 3)
+                {
+                    //Console.WriteLine(stack.Max());
+                    res += ", " + stack.Max().ToString();
+                }
                 else
                 {
-                    Console.WriteLine(q.Min());
+                    //Console.WriteLine(stack.Min());
+                    res +=", " + stack.Min().ToString();
                 }
             }
-          
-           
+            Console.WriteLine(res);
+            Console.WriteLine(string.Join(", ", stack));
+
         }
     }
 }
