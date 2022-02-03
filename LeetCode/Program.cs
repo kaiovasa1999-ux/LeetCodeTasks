@@ -8,41 +8,37 @@
     {
         static void Main(string[] args)
         {
-            int[] data = Console.ReadLine().Split(" ").Select(int.Parse).ToArray();
-            int n = data[0];
-            int s = data[1];
-            int x = data[2];
-            int[] nummbersInput = Console.ReadLine().Split().Select(int.Parse).ToArray();
+            int[] data = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+            var n = data[0];
+            var s = data[1];
+            var x = data[2];
+            var numberdata = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+            Queue<int> q = new Queue<int>(numberdata);
 
-            Stack<int> numbers = new Stack<int>(nummbersInput);
 
-            //for (int i = 0; i < n; i++)
-            //{
-            //    numbers.Push(nummbersInput[i]);
-            //}
             while (true)
             {
-                if (s >= numbers.Count)
+                if (q.Count() <= s)
                 {
                     Console.WriteLine(0);
                     break;
                 }
                 for (int i = 0; i < s; i++)
                 {
-                    numbers.Pop();
+                    q.Dequeue();
+                }
+                if (q.Contains(x))
+                {
+                    Console.WriteLine(true);
                 }
 
-                if (numbers.Contains(x))
-                {
-                    Console.WriteLine("true");
-                }
                 else
                 {
-                    Console.WriteLine(numbers.Min());
+                    Console.WriteLine(q.Min());
                 }
             }
-            //Console.WriteLine(string.Join(", ", numbers));
-         
+          
+           
         }
     }
 }
