@@ -8,40 +8,30 @@
     {
         static void Main(string[] args)
         {
-            int x = int.Parse(Console.ReadLine());
-            Stack<int> stack = new Stack<int>();
-            var res = string.Empty;
-            for (
-                int i = 0; i < x; i++)
+            int food = int.Parse(Console.ReadLine());
+            var orders = Console.ReadLine().Split(" ",StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+            Queue<int> queue = new Queue<int>(orders);
+            Console.WriteLine(queue.Max());
+
+            while (true)
             {
-                int[] data = Console.ReadLine().Split(" ").Select(int.Parse).ToArray();
-                var function = data[0];
-                if(function == 1)
+                var x = queue.Dequeue();
+                if (food < x)
                 {
-                    var number = data[1];
-                    stack.Push(number);
+                    Console.WriteLine($"not food {food} for order " + x);
+                    break;
                 }
-                if(!stack.Any() && function == 2)
+                if(queue.Count() == 0)
                 {
-                    continue;
+                    break;
                 }
-                if(function == 2)
+                food -= x;
+                if (food > 0 && queue.Count() == 0)
                 {
-                    stack.Pop();
+                    Console.WriteLine("done");
                 }
-                if(function == 3)
-                {
-                    //Console.WriteLine(stack.Max());
-                    res += ", " + stack.Max().ToString();
-                }
-                else
-                {
-                    //Console.WriteLine(stack.Min());
-                    res +=", " + stack.Min().ToString();
-                }
+
             }
-            Console.WriteLine(res);
-            Console.WriteLine(string.Join(", ", stack));
 
         }
     }
