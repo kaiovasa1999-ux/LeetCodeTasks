@@ -2,36 +2,47 @@
 {
     using System;
     using System.Collections.Generic;
-    using LeetCode.PrentesesGeneration;
-
+    using System.Linq;
+    
     class Program
     {
         static void Main(string[] args)
         {
-            var x = new ListMerger();
-            var l1 = new List<int>();
-            var l2 = new List<int>();
-          
-            l1.Add(1);
-            l1.Add(2);
-            l1.Add(3);
-            l1.Add(4);
-            l1.Add(5);
-            l1.Add(8);
-            l2.Add(3);
-            l2.Add(31);
-            l2.Add(6);
-            l2.Add(2);
-            l2.Add(7);
+            int[] data = Console.ReadLine().Split(" ").Select(int.Parse).ToArray();
+            int n = data[0];
+            int s = data[1];
+            int x = data[2];
+            int[] nummbersInput = Console.ReadLine().Split().Select(int.Parse).ToArray();
 
-            var res = "";
-            foreach (var item in x.MergeTwoLists(l1, l2))
+            Stack<int> numbers = new Stack<int>(nummbersInput);
+
+            //for (int i = 0; i < n; i++)
+            //{
+            //    numbers.Push(nummbersInput[i]);
+            //}
+            while (true)
             {
-                res += item + ", ";
+                if (s >= numbers.Count)
+                {
+                    Console.WriteLine(0);
+                    break;
+                }
+                for (int i = 0; i < s; i++)
+                {
+                    numbers.Pop();
+                }
+
+                if (numbers.Contains(x))
+                {
+                    Console.WriteLine("true");
+                }
+                else
+                {
+                    Console.WriteLine(numbers.Min());
+                }
             }
-
-            Console.WriteLine(res);
-
+            //Console.WriteLine(string.Join(", ", numbers));
+         
         }
     }
 }
