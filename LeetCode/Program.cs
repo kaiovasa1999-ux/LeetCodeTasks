@@ -8,31 +8,35 @@
     {
         static void Main(string[] args)
         {
-            int food = int.Parse(Console.ReadLine());
-            var orders = Console.ReadLine().Split(" ",StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
-            Queue<int> queue = new Queue<int>(orders);
-            Console.WriteLine(queue.Max());
+            var data = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+            var boxCapacity = int.Parse(Console.ReadLine());
+            var boxes = 1;
+            var amount = 0;
+            var x = boxCapacity;
 
+            Stack<int> stack = new Stack<int>(data);
             while (true)
             {
-                var x = queue.Dequeue();
-                if (food < x)
-                {
-                    Console.WriteLine($"not food {food} for order " + x);
-                    break;
-                }
-                if(queue.Count() == 0)
+                if (!stack.Any())
                 {
                     break;
                 }
-                food -= x;
-                if (food > 0 && queue.Count() == 0)
+                amount = stack.Pop();
+                if(amount < boxCapacity)
                 {
-                    Console.WriteLine("done");
+                    boxCapacity -= amount;
+                    continue;
                 }
-
+                if (amount >= boxCapacity)
+                {
+                    amount -= boxCapacity;
+                    boxes++;
+                    boxCapacity = x;
+                    boxCapacity -= amount;
+                }
+               
             }
-
+            Console.WriteLine(boxes);
         }
     }
 }
