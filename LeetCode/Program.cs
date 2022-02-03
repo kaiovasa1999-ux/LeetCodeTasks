@@ -8,35 +8,47 @@
     {
         static void Main(string[] args)
         {
-            var data = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
-            var boxCapacity = int.Parse(Console.ReadLine());
-            var boxes = 1;
-            var amount = 0;
-            var x = boxCapacity;
-
-            Stack<int> stack = new Stack<int>(data);
-            while (true)
+            var data = Console.ReadLine().Split(", ", StringSplitOptions.RemoveEmptyEntries).ToArray();
+            Queue<string> songsQueue = new Queue<string>(data);
+            var songsOut = string.Empty;
+            while (songsQueue.Any())
             {
-                if (!stack.Any())
+
+                var dataCommand = Console.ReadLine();
+                var songName = dataCommand.Substring(4);
+                var x = dataCommand.Split(" ");
+
+                var command = x[0];
+                
+                if (command == "Play" && songsQueue.Any())
                 {
-                    break;
+                    
+                    
+                    songsOut += songsQueue.Dequeue() + ", ";
                 }
-                amount = stack.Pop();
-                if(amount < boxCapacity)
+                if(command == "Show")
                 {
-                    boxCapacity -= amount;
-                    continue;
+                    Console.WriteLine(string.Join(", ", songsQueue));
                 }
-                if (amount >= boxCapacity)
+                if (command == "Add")
                 {
-                    amount -= boxCapacity;
-                    boxes++;
-                    boxCapacity = x;
-                    boxCapacity -= amount;
+                    if (songsQueue.Contains(songName))
+                    {
+                        Console.WriteLine($"{songName} is already contained!");
+                    }
+                    else
+                    {
+                        songsQueue.Enqueue(songName);
+                    }
+                    
                 }
-               
+                if (!songsQueue.Any())
+                {
+                    Console.WriteLine("No more songs!");
+                }
             }
-            Console.WriteLine(boxes);
+        
+           
         }
     }
 }
