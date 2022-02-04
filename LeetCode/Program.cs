@@ -3,52 +3,50 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using LeetCode.Matrix;
 
     class Program
     {
         static void Main(string[] args)
         {
-            var data = Console.ReadLine().Split(", ", StringSplitOptions.RemoveEmptyEntries).ToArray();
-            Queue<string> songsQueue = new Queue<string>(data);
-            var songsOut = string.Empty;
-            while (songsQueue.Any())
+            int n = int.Parse(Console.ReadLine());
+            var sum1 = 0;
+            var sum2 = 0;
+            int[,] matrix = new int[n, n];
+            for (int row = 0; row < n; row++)
             {
-
-                var dataCommand = Console.ReadLine();
-                var songName = dataCommand.Substring(4);
-                var x = dataCommand.Split(" ");
-
-                var command = x[0];
-                
-                if (command == "Play" && songsQueue.Any())
+                int[] rowData = Console.ReadLine().Split(" ").Select(int.Parse).ToArray();
+                for (int col = 0; col < n; col++)
                 {
-                    
-                    
-                    songsOut += songsQueue.Dequeue() + ", ";
-                }
-                if(command == "Show")
-                {
-                    Console.WriteLine(string.Join(", ", songsQueue));
-                }
-                if (command == "Add")
-                {
-                    if (songsQueue.Contains(songName))
-                    {
-                        Console.WriteLine($"{songName} is already contained!");
-                    }
-                    else
-                    {
-                        songsQueue.Enqueue(songName);
-                    }
-                    
-                }
-                if (!songsQueue.Any())
-                {
-                    Console.WriteLine("No more songs!");
+                    matrix[row, col] = rowData[col];
                 }
             }
-        
-           
+            for (int row = 0; row < n; row++)
+            {
+                for (int col = 0; col < n; col++)
+                {
+                    if (row == col)
+                    {
+                        sum1 += matrix[row, col];
+                    }
+                }
+            }
+
+            for (int r = 0; r < n; r++)
+            {
+                for (int c = n - 1; c >= 0; c--)
+                {
+
+                    sum2 += matrix[r, c];
+                    r++;
+                }
+            }
+            var res = Math.Abs(sum1 - sum2);
+            Console.WriteLine(sum1);
+            Console.WriteLine(sum2);
+            Console.WriteLine(res);
+
+
         }
     }
 }
