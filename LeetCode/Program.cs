@@ -9,48 +9,65 @@
         static void Main(string[] args)
         {
             int[] data = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+
             var n = data[0];
             var m = data[1];
-
             int[,] matrix = new int[n, m];
-           
-            var biggestSubMatrixValue = 0;
-
             for (int row = 0; row < n; row++)
             {
-                var rowData = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+                int[] matrixRow = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+                
                 for (int col = 0; col < m; col++)
                 {
-                    matrix[row, col] = rowData[col];
+                    matrix[row, col] = matrixRow[col];
                 }
             }
 
-    
-            for (int row = 0; row < n-2; row++)
+            while (true)
             {
-                for (int col = 0; col < m -2; col++)
+                var rowData = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).ToArray();
+                var command = rowData[0];
+
+                if(command == "END")
                 {
-                    var sum = matrix[row, col];
-                    sum += matrix[row, col + 1];
-                    sum += matrix[row, col + 2];
+                    break;
+                }
+                if (command == "swap")
+                {
+                    var r1 = int.Parse(rowData[1]);
+                    var c1 = int.Parse(rowData[2]);
+                    var r2 = int.Parse(rowData[3]);
+                    var c2 = int.Parse(rowData[4]);
 
-                    sum += matrix[row + 1, col];
-                    sum += matrix[row + 1, col + 1];
-                    sum += matrix[row + 1, col + 2];
-
-                    sum += matrix[row + 2, col];
-                    sum += matrix[row + 2, col + 1];
-                    sum += matrix[row + 2, col + 2];
-                    if(sum > biggestSubMatrixValue)
+                    if(r1 > n || r1 > m
+                        || r2 > n || r2 > m
+                        || c1 > n || c1 > m
+                        || c2 > n || c1 > m)
                     {
-                        biggestSubMatrixValue = sum;
+                        Console.WriteLine("INvalid input");
+                    }
+                    else
+                    {
+                        var x = matrix[r1, c1];
+                        matrix[r1, c1] = matrix[r2, c2];
+                        matrix[r2, c2] = x;
+                        for (int row = 0; row < n; row++)
+                        {
+                            for (int col = 0; col < m; col++)
+                            {
+                                Console.WriteLine(matrix[row, col]);
+                                Console.Write("");
+                            }
+                        }
                     }
                 }
-
+                else
+                {
+                    Console.WriteLine(command);
+                }
+                
             }
-            Console.WriteLine(biggestSubMatrixValue);
-
-
+          
         }
     }
 }
