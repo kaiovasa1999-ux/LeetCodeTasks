@@ -8,66 +8,159 @@
     {
         static void Main(string[] args)
         {
-            int[] data = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+            int[] sizes = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+            var n = sizes[0];
+            var m = sizes[1];
+            char[,] matrix = new char[n, m];
+            var PlayerRow = 0;
+            var PlayerCol = 0;
 
-            var n = data[0];
-            var m = data[1];
-            int[,] matrix = new int[n, m];
+            bool isWinner = false;
+            bool isDead = false;
+
+
             for (int row = 0; row < n; row++)
             {
-                int[] matrixRow = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
-                
+                char[] rowData = Console.ReadLine().ToCharArray();
                 for (int col = 0; col < m; col++)
                 {
-                    matrix[row, col] = matrixRow[col];
+                    matrix[row, col] = rowData[col];
                 }
             }
 
-            while (true)
+            for (int row = 0; row < matrix.GetLength(0); row++)
             {
-                var rowData = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).ToArray();
-                var command = rowData[0];
-
-                if(command == "END")
+                for (int col = 0; col < matrix.GetLength(1); col++)
                 {
-                    break;
-                }
-                if (command == "swap")
-                {
-                    var r1 = int.Parse(rowData[1]);
-                    var c1 = int.Parse(rowData[2]);
-                    var r2 = int.Parse(rowData[3]);
-                    var c2 = int.Parse(rowData[4]);
-
-                    if(r1 > n || r1 > m
-                        || r2 > n || r2 > m
-                        || c1 > n || c1 > m
-                        || c2 > n || c1 > m)
+                    if (matrix[row, col] == 'P')
                     {
-                        Console.WriteLine("INvalid input");
-                    }
-                    else
-                    {
-                        var x = matrix[r1, c1];
-                        matrix[r1, c1] = matrix[r2, c2];
-                        matrix[r2, c2] = x;
-                        for (int row = 0; row < n; row++)
-                        {
-                            for (int col = 0; col < m; col++)
-                            {
-                                Console.WriteLine(matrix[row, col]);
-                                Console.Write("");
-                            }
-                        }
+                        PlayerRow = row;
+                        PlayerCol = col;
                     }
                 }
-                else
-                {
-                    Console.WriteLine(command);
-                }
-                
+
             }
-          
+
+            var dircations = Console.ReadLine();
+
+            foreach (var direction in dircations)
+            {
+                var newPlayerRow = PlayerRow;
+                var newPlayerCol = PlayerCol;
+                List<int[]> B_Coordinates = GetBunniesCoodrinates(matrix);
+                if (direction == 'U')
+                {
+                    newPlayerCol--;
+                }
+                if (direction == 'D')
+                {
+                    newPlayerRow++;
+                }
+                if (direction == 'L')
+                {
+                    newPlayerCol--;
+                }
+                if (direction == 'R')
+                {
+                    newPlayerCol++;
+                }
+
+                if (!IsValidCell(newPlayerRow, newPlayerCol, n, m))
+                {
+                    isWinner = true;
+                  
+                    matrix[PlayerRow, PlayerCol] = '.';
+                    if (isWinner == true)
+                    {
+                        Console.WriteLine($"Winner {PlayerRow} {PlayerCol}");
+                        break;
+                    }
+
+                }
+                else if (matrix[newPlayerRow, newPlayerCol] == '.')
+                {
+                  
+                    matrix[PlayerRow, PlayerCol] = '.';
+                    matrix[newPlayerRow, newPlayerCol] = 'P';
+                    PlayerRow = newPlayerRow;
+                    PlayerCol = newPlayerCol;
+                    if (isWinner == true)
+                    {
+                        Console.WriteLine($"Winner {PlayerRow} {PlayerCol}");
+                        break;
+                    }
+
+                }
+                else if (matrix[newPlayerRow, newPlayerCol] == 'B')
+                {
+                    isDead = true;
+                   
+                    matrix[PlayerRow, PlayerCol] = '.';
+                    PlayerRow = newPlayerRow;
+                    PlayerCol = newPlayerCol;
+                    if (isDead)
+                    {
+                        Console.WriteLine($"Dead: {PlayerRow}{PlayerCol}");
+                    }
+                }
+              
+                SpreadBunnie(B_Coordinates, matrix);
+
+                for (int row = 0; row < matrix.GetLength(0); row++)
+                {
+                    for (int col = 0; col < matrix.GetLength(1); col++)
+                    {
+                        Console.Write(matrix[row, col]);
+                    }
+                    Console.WriteLine();
+                }
+            }
+        }
+
+        private static void SpreadBunnie(List<int[]> b_Coordinates, char[,] matrix)
+        {
+            foreach (int[] b_cordinates in b_Coordinates)
+            {
+                int row = b_cordinates[0];
+                int col = b_cordinates[1];
+                if (IsValidCell(row - 1, col, matrix.GetLength(0), matrix.GetLength(1)))
+                {
+                    matrix[row, col] = 'B';
+                }
+                if (IsValidCell(row + 1, col, matrix.GetLength(0), matrix.GetLength(1)))
+                {
+                    matrix[row, col] = 'B';
+                }
+                if (IsValidCell(row, col +1, matrix.GetLength(0), matrix.GetLength(1)))
+                {
+                    matrix[row, col] = 'B';
+                }
+                if (IsValidCell(row , col - 1, matrix.GetLength(0), matrix.GetLength(1)))
+                {
+                    matrix[row, col] = 'B';
+                }
+            }
+        }
+
+        private static List<int[]> GetBunniesCoodrinates(char[,] matrix)
+        {
+            List<int[]> bunniesCoordinates = new List<int[]>();
+            for (int row = 0; row < matrix.GetLength(0); row++)
+            {
+                for (int col = 0; col < matrix.GetLength(1); col++)
+                {
+                    if (matrix[row, col] == 'B')
+                    {
+                        bunniesCoordinates.Add(new int[] { row, col });
+                    }
+                }
+            }
+            return bunniesCoordinates;
+        }
+
+        private static bool IsValidCell(int row, int col, int n, int m)
+        {
+            return row >= 0 && row < n && col >= 0 && col < m;
         }
     }
 }
